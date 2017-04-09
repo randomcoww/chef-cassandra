@@ -1,7 +1,7 @@
 class ChefCassandra
   class Provider
     class Query < Chef::Provider
-      require 'cassandra'
+      # require 'cassandra'
 
       provides :cassandra_query, os: "linux"
 
@@ -27,6 +27,7 @@ class ChefCassandra
 
       def cluster
         return @cluster unless @cluster.nil?
+        require 'cassandra'
 
         Time::timeout(new_resource.timeout) {
           while true
