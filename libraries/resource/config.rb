@@ -10,7 +10,7 @@ class ChefCassandra
 
       property :exists, [TrueClass, FalseClass]
       property :config, Hash
-      property :content, String, default: lazy { to_conf }
+      property :content, String, default: lazy { config.to_yaml }
       property :path, String, desired_state: false,
                               default: lazy { Cassandra::CONFIG_PATH }
 
