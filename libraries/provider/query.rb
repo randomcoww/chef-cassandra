@@ -13,7 +13,6 @@ class ChefCassandra
       def action_run
         converge_by("CQL Query: #{new_resource}") do
 
-          cluster = Cassandra.cluster(new_resource.cluster_options)
           session = cluster.connect(new_resource.keyspace)
 
           if !new_resource.arguments.nil? && !new_resource.arguments.empty?
@@ -22,6 +21,24 @@ class ChefCassandra
             session.execute(new_resource.query)
           end
         end
+      end
+
+      private
+
+      def cluster
+        return @cluster unless @cluster.nil?
+
+        Time::timeout(new_resource.timeout) {
+          while true
+            begin
+              @cluster = Cassandra.cluster(new_resource.cluster_options)
+              return @cluster
+            rescue Cassandra::Errors::NoHostsAvailable
+              Chef::Log.info("Waiting #{new_resource.timeout} seconds for hosts to come up...")
+            end
+            sleep 1
+          end
+        }
       end
     end
   end

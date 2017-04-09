@@ -12,6 +12,7 @@ class ChefCassandra
       property :Keyspace, String
       property :query, String
       property :arguments, Array, default: []
+      property :timeout, Integer, default: 10
 
     end
   end
