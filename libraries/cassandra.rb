@@ -1,3 +1,3 @@
 module Cassandra
-  CONFIG_PATH ||= '/etc/Cassandra/Cassandra.yaml'
+  CONFIG_PATH ||= '/etc/cassandra/cassandra.yaml'
 end
