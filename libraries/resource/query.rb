@@ -7,10 +7,10 @@ class ChefCassandra
       allowed_actions :run
 
       #http://docs.datastax.com/en/developer/ruby-driver/3.0/api/cassandra/#cluster-class_method
-      property :cluster_options, Hash, default: {}
 
-      property :Keyspace, String
+      property :keyspace, String
       property :query, String
+      property :cluster_options, Hash, default: {}
       property :arguments, Array, default: []
       property :timeout, Integer, default: 10
 
