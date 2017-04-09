@@ -29,7 +29,7 @@ class ChefCassandra
         return @cluster unless @cluster.nil?
         require 'cassandra'
 
-        Time::timeout(new_resource.timeout) {
+        Timeout::timeout(new_resource.timeout) {
           while true
             begin
               @cluster = Cassandra.cluster(new_resource.cluster_options)
