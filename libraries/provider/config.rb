@@ -9,7 +9,7 @@ class ChefCassandra
         current_resource.exists(::File.exist?(new_resource.path))
 
         if current_resource.exists
-          current_resource.content(::File.read(new_resource.path).chomp)
+          current_resource.content(::File.read(new_resource.path))
         else
           current_resource.content('')
         end

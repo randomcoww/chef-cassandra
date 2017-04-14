@@ -13,6 +13,7 @@ class ChefCassandra
       property :cluster_options, Hash, default: {}
       property :arguments, Array, default: []
       property :timeout, Integer, default: 10
+      property :ignore_already_exists, [TrueClass,FalseClass], default: false
 
     end
   end

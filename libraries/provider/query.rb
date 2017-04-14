@@ -34,8 +34,16 @@ class ChefCassandra
             begin
               @cluster = Cassandra.cluster(new_resource.cluster_options)
               return @cluster
+              
             rescue Cassandra::Errors::NoHostsAvailable
               Chef::Log.info("Waiting #{new_resource.timeout} seconds for hosts to come up...")
+
+            rescue Cassandra::Errors::AlreadyExistsError => e
+              if new_resource.ignore_already_exists
+                Chef::Log.warn("Resource already exists: #{e.message}")
+              else
+                raise e
+              end
             end
             sleep 1
           end
