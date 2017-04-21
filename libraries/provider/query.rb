@@ -2,6 +2,7 @@ class ChefCassandra
   class Provider
     class Query < Chef::Provider
       # require 'cassandra'
+      include CassandraWrapper
 
       provides :cassandra_query, os: "linux"
 
@@ -13,41 +14,14 @@ class ChefCassandra
       def action_run
         converge_by("CQL Query: #{new_resource}") do
 
-          session = cluster.connect(new_resource.keyspace)
+          cluster = Cluster.new(new_resource.cluster_options,
+            new_resource.timeout)
 
-          if !new_resource.arguments.nil? && !new_resource.arguments.empty?
-            session.execute(new_resource.query, arguments: new_resource.arguments)
-          else
-            session.execute(new_resource.query)
-          end
+          cluster.query(new_resource.keyspace,
+            new_resource.query,
+            new_resource.arguments,
+            new_resource.ignore_already_exists)
         end
-      end
-
-      private
-
-      def cluster
-        return @cluster unless @cluster.nil?
-        require 'cassandra'
-
-        Timeout::timeout(new_resource.timeout) {
-          while true
-            begin
-              @cluster = Cassandra.cluster(new_resource.cluster_options)
-              return @cluster
-              
-            rescue Cassandra::Errors::NoHostsAvailable
-              Chef::Log.info("Waiting #{new_resource.timeout} seconds for hosts to come up...")
-
-            rescue Cassandra::Errors::AlreadyExistsError => e
-              if new_resource.ignore_already_exists
-                Chef::Log.warn("Resource already exists: #{e.message}")
-              else
-                raise e
-              end
-            end
-            sleep 1
-          end
-        }
       end
     end
   end
