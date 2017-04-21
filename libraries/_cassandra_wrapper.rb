@@ -4,12 +4,14 @@ module CassandraWrapper
   class CassandraCluster
     require 'cassandra'
 
+    attr_reader :cluster
+
     def initialize(cluster_options, timeout)
       Timeout::timeout(timeout) {
         while true
           begin
             @cluster = Cassandra.cluster(cluster_options={})
-            return @cluster
+            return
 
           rescue Cassandra::Errors::NoHostsAvailable
             Chef::Log.info("Waiting #{timeout} seconds for hosts to come up...")
@@ -21,7 +23,7 @@ module CassandraWrapper
     end
 
     def query(keyspace, query, arguments=[], ignore_already_exists=true)
-      session = @cluster.connect(keyspace)
+      session = cluster.connect(keyspace)
       session.execute(query, arguments: arguments)
 
     rescue Cassandra::Errors::AlreadyExistsError => e
