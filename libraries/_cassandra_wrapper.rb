@@ -8,7 +8,7 @@ module CassandraWrapper
       Timeout::timeout(timeout) {
         while true
           begin
-            @cluster = Cassandra.cluster(cluster_options)
+            @cluster = Cassandra.cluster(cluster_options={})
             return
 
           rescue Cassandra::Errors::NoHostsAvailable

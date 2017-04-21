@@ -14,7 +14,7 @@ class ChefCassandra
       def action_run
         converge_by("CQL Query: #{new_resource}") do
 
-          cluster = Cluster.new(new_resource.cluster_options,
+          cluster = CassandraCluster.new(new_resource.cluster_options,
             new_resource.timeout)
 
           cluster.query(new_resource.keyspace,
