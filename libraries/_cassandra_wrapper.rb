@@ -2,11 +2,13 @@ module CassandraWrapper
   CONFIG_PATH ||= '/etc/cassandra/cassandra.yaml'
 
   class CassandraCluster
-    require 'cassandra'
+    # require 'cassandra'
 
     attr_reader :cluster
 
     def initialize(cluster_options, timeout)
+      require 'cassandra'
+
       Timeout::timeout(timeout) {
         while true
           begin
