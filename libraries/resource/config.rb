@@ -1,7 +1,7 @@
 class ChefCassandra
   class Resource
     class Config < Chef::Resource
-      include Cassandra
+      include CassandraWrapper
 
       resource_name :cassandra_config
 
@@ -12,7 +12,7 @@ class ChefCassandra
       property :config, Hash
       property :content, String, default: lazy { config.to_yaml }
       property :path, String, desired_state: false,
-                              default: lazy { Cassandra::CONFIG_PATH }
+                              default: lazy { CassandraWrapper::CONFIG_PATH }
     end
   end
 end
