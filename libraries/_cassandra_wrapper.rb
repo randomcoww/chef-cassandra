@@ -9,7 +9,7 @@ module CassandraWrapper
         while true
           begin
             @cluster = Cassandra.cluster(cluster_options={})
-            return
+            return @cluster
 
           rescue Cassandra::Errors::NoHostsAvailable
             Chef::Log.info("Waiting #{timeout} seconds for hosts to come up...")
